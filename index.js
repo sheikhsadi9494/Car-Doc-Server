@@ -48,11 +48,24 @@ async function run() {
             res.send(orders);
         })
 
-        app.delete('orders/:id', async (req, res) => {
+        app.delete('/orders/:id', async (req, res) => {
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
             const order = await ordersCollection.deleteOne(query);
             res.send(order);
+        })
+
+        app.patch('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const status = req.body.status;
+            const query = {_id: ObjectId(id)};
+            const updatedoc = {
+                $set: {
+                    status: status
+                }
+            };
+            const result = await ordersCollection.updateOne(query, updatedoc);
+            res.send(result);
         })
 
     }
